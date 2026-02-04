@@ -229,8 +229,8 @@ stateDiagram-v2
         CheckError --> ThinkingError: Thinking level error
         CheckError --> Success: No error
 
-        AuthError --> MarkFailure: Mark profile failure<br/>cooldown: 60min
-        RateLimit --> MarkFailure: Mark profile failure<br/>cooldown: 30min
+        AuthError --> MarkFailure: Mark profile failure (cooldown 60min)
+        RateLimit --> MarkFailure: Mark profile failure (cooldown 30min)
         MarkFailure --> NextProfile
 
         ContextOverflow --> AutoCompact: Attempt compaction
@@ -815,38 +815,38 @@ stateDiagram-v2
         }
 
         state AuthError {
-            [*] --> MarkFailure: Set cooldown
-            MarkFailure --> CheckProfiles: More profiles?
-            CheckProfiles --> NextProfile: Yes
-            CheckProfiles --> ModelFallback: No
-            NextProfile --> [*]: Retry with profile
-            ModelFallback --> [*]: Try next model
+            [*] --> Auth_MarkFailure: Set cooldown
+            Auth_MarkFailure --> Auth_CheckProfiles: More profiles?
+            Auth_CheckProfiles --> Auth_NextProfile: Yes
+            Auth_CheckProfiles --> Auth_ModelFallback: No
+            Auth_NextProfile --> [*]: Retry with profile
+            Auth_ModelFallback --> [*]: Try next model
         }
 
         state RateLimitError {
-            [*] --> MarkCooldown: Set long cooldown
-            MarkCooldown --> CheckProfiles: More profiles?
-            CheckProfiles --> NextProfile: Yes
-            CheckProfiles --> ModelFallback: No
-            NextProfile --> [*]: Retry with profile
-            ModelFallback --> [*]: Try next model
+            [*] --> Rate_MarkCooldown: Set long cooldown
+            Rate_MarkCooldown --> Rate_CheckProfiles: More profiles?
+            Rate_CheckProfiles --> Rate_NextProfile: Yes
+            Rate_CheckProfiles --> Rate_ModelFallback: No
+            Rate_NextProfile --> [*]: Retry with profile
+            Rate_ModelFallback --> [*]: Try next model
         }
 
         state ThinkingError {
-            [*] --> CheckAttempted: Check attempted levels
-            CheckAttempted --> HasFallback: Lower level available
-            CheckAttempted --> NoFallback: All attempted
-            HasFallback --> [*]: Retry with fallback
-            NoFallback --> [*]: Report error
+            [*] --> Think_CheckAttempted: Check attempted levels
+            Think_CheckAttempted --> Think_HasFallback: Lower level available
+            Think_CheckAttempted --> Think_NoFallback: All attempted
+            Think_HasFallback --> [*]: Retry with fallback
+            Think_NoFallback --> [*]: Report error
         }
 
         state TimeoutError {
-            [*] --> MarkTimeout: Mark profile timeout
-            MarkTimeout --> CheckProfiles: More profiles?
-            CheckProfiles --> NextProfile: Yes
-            CheckProfiles --> Report: No
-            NextProfile --> [*]: Retry with profile
-            Report --> [*]: Report timeout
+            [*] --> Timeout_MarkTimeout: Mark profile timeout
+            Timeout_MarkTimeout --> Timeout_CheckProfiles: More profiles?
+            Timeout_CheckProfiles --> Timeout_NextProfile: Yes
+            Timeout_CheckProfiles --> Timeout_Report: No
+            Timeout_NextProfile --> [*]: Retry with profile
+            Timeout_Report --> [*]: Report timeout
         }
 
         ContextOverflow --> [*]: Decision
