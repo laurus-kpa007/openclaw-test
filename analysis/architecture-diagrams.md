@@ -180,7 +180,7 @@ flowchart TD
 
     CheckTeam -->|No| CheckAccountBinding{Specific Account Binding?}
     CheckAccountBinding -->|Yes| ReturnAccount[Return Agent<br/>matchedBy: binding.account]
-    CheckAccountBinding -->|No| CheckWildcard{Wildcard Binding<br/>accountId: "*"?}
+    CheckAccountBinding -->|No| CheckWildcard{Wildcard Binding?}
 
     CheckWildcard -->|Yes| ReturnChannel[Return Agent<br/>matchedBy: binding.channel]
     CheckWildcard -->|No| NoBinding
@@ -635,12 +635,12 @@ sequenceDiagram
 flowchart TD
     Start([Tool Execution Request]) --> LoadPolicies[Load All Policies]
 
-    LoadPolicies --> GlobalPolicy[Global Policy<br/>config.tools.policy.global]
-    LoadPolicies --> AgentPolicy[Agent Policy<br/>config.agents.list[id].tools]
-    LoadPolicies --> ProviderPolicy[Provider Policy<br/>config.agents.defaults.models[provider].tools]
-    LoadPolicies --> GroupPolicy[Group Policy<br/>config.tools.policy.groups]
-    LoadPolicies --> SandboxPolicy[Sandbox Policy<br/>config.sandbox.sessions[key].policy]
-    LoadPolicies --> SubagentPolicy[Subagent Policy<br/>derived from parent]
+    LoadPolicies --> GlobalPolicy[Global Policy]
+    LoadPolicies --> AgentPolicy[Agent Policy]
+    LoadPolicies --> ProviderPolicy[Provider Policy]
+    LoadPolicies --> GroupPolicy[Group Policy]
+    LoadPolicies --> SandboxPolicy[Sandbox Policy]
+    LoadPolicies --> SubagentPolicy[Subagent Policy]
 
     GlobalPolicy --> CheckGlobal{Global<br/>Allows?}
     CheckGlobal -->|No| Denied[Tool Denied]
@@ -723,8 +723,8 @@ graph LR
     end
 
     subgraph "Session State"
-        SessionStore[Session Store<br/>sessions.json]
-        SessionFile[Session File<br/>{sessionKey}.jsonl]
+        SessionStore[Session Store]
+        SessionFile[Session File]
         Skills[Skills Snapshot]
     end
 
